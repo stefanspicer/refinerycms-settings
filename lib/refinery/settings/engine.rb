@@ -14,6 +14,7 @@ module Refinery
           plugin.name = 'refinery_settings'
           plugin.menu_match = %r{refinery/settings$}
           plugin.hide_from_menu = !Refinery::Settings.enable_interface
+          plugin.always_allow_access = true
           plugin.url = proc { Refinery::Core::Engine.routes.url_helpers.admin_settings_path }
         end
       end
