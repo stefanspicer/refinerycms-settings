@@ -13,6 +13,7 @@ module Refinery
 
     FORM_VALUE_TYPES = [
       ['Multi-line', 'text_area'],
+      ['String',     'string'],
       ['Checkbox', 'check_box']
     ]
 

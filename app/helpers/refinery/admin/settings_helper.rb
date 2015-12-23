@@ -9,7 +9,8 @@ module ::Refinery
         if @setting.form_value_type == 'check_box'
           raw "<h3>#{@setting.name.to_s.titleize}?</h3>"
         else
-          f.label :value
+          locale_scope = "refinery.admin.settings.form.#{@setting.name}.settings_value_name"
+          f.label :value, t(locale_scope), :'data-locale-scope' => locale_scope
         end
       end
 
@@ -19,9 +20,11 @@ module ::Refinery
           raw "#{f.check_box :value, :value => @setting.form_value}
                #{f.label :value, help.presence || t('enabled', :scope => 'refinery.admin.settings.form'),
                          :class => 'stripped'}"
-        else
+        when 'text_area'
           f.text_area :value, :value => @setting.form_value,
-                      :class => 'widest', :rows => 5
+                      :class => 'form-control', :rows => 5
+        else
+          f.text_field :value, :value => @setting.value, :class => "form-control"
         end
       end
     end
