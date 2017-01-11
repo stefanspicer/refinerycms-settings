@@ -1,0 +1,54 @@
+<%= form_for setting, :url => action_url do |f| %>
+
+  <% locale_scope = "refinery.admin.settings.form.#{setting.name}" %>
+  <p data-locale-scope="<%= "#{locale_scope}.explanation" %>">
+    <%= t("#{locale_scope}.explanation") %>
+  </p>
+  <p data-locale-scope="<%= "#{locale_scope}.below_edit_email_sent" %>">
+    <%= t("#{locale_scope}.below_edit_email_sent") %>
+  </p>
+
+  <div id='<%= setting.name %>'>
+    <div class="form-group row">
+      <label class="col-sm-2 form-control-label" data-locale-scope="<%= "#{locale_scope}.to" %>">
+        <%= t("#{locale_scope}.to") %>
+      </label>
+      <div class="col-sm-10">
+        <p class="form-control-static" data-locale-scope="<%= "#{locale_scope}.the_person" %>">
+          <%= t("#{locale_scope}.the_person") %>
+        </p>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-2 form-control-label" data-locale-scope="<%= "#{locale_scope}.from" %>">
+        <%= t("#{locale_scope}.from") %>
+      </label>
+      <div class="col-sm-10">
+        <p class="form-control-static"><%= "#{Refinery::Core.site_name} &lt;no-reply@#{request.domain}&gt;".html_safe %></p>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-2 form-control-label" data-locale-scope="<%= "#{locale_scope}.subject" %>">
+        <%= t("#{locale_scope}.subject") %>
+      </label>
+      <div class="col-sm-10">
+        <%= text_field_tag "subject", subject, :class => 'form-control' %>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-2 form-control-label" data-locale-scope="<%= "#{locale_scope}.message" %>">
+        <%= t("#{locale_scope}.message") %>
+      </label>
+      <div class="col-sm-10">
+        <%= f.text_area :value, :value => setting.value, :rows => "7", :class => 'form-control m-b-2' %>
+        <small class="text-muted" data-locale-scope="<%= "#{locale_scope}.note" %>">
+          <%= t("#{locale_scope}.note") %>
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <%= render '/refinery/admin/form_actions', :f => f,
+             :continue_editing => false,
+             :hide_delete => true %>
+<% end %>
