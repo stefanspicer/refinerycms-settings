@@ -8,8 +8,6 @@ module ::Refinery
               :order => "name ASC",
               :redirect_to_url => :redirect_to_where?
 
-      before_action :sanitise_params, :only => [:create, :update]
-
       def new
         form_value_type = ((current_refinery_user.has_role?(:superuser) && params[:form_value_type]) || 'text_area')
         @setting = ::Refinery::Setting.new(:form_value_type => form_value_type)
@@ -19,6 +17,18 @@ module ::Refinery
         @setting = ::Refinery::Setting.find(params[:id])
 
         render :layout => false if request.xhr?
+      end
+
+      def multi_update
+        result = true
+        params['settings'].each do |i, setting_hash|
+          setting = find_setting_scope.find(setting_hash[:name])
+          if !setting.update_attributes(setting_hash.permit(:name, :value))
+            result = false
+          end
+        end
+
+        result ? create_or_update_successful : create_or_update_unsuccessful('edit')
       end
 
     protected
@@ -45,14 +55,8 @@ module ::Refinery
         (from_dialog? && session[:return_to].present?) ? session[:return_to] : refinery.admin_settings_path
       end
 
-      # this fires before an update or create to remove any attempts to pass sensitive arguments.
-      def sanitise_params
-        params.delete(:scoping)
-      end
-
       def setting_params
-        params.require(:setting).permit(:title, :name, :value, :destroyable,
-                                          :scoping, :restricted, :form_value_type)
+        params.require(:setting).permit(:title, :name, :value, :destroyable, :restricted, :form_value_type)
       end
 
     end
