@@ -1,0 +1,34 @@
+<% if notify && body && subject %>
+  <div class="dropdown">
+    <button class="btn btn-link-grey icon-left" type="button" id="dropdown-sort">
+      <i class="icon icon-gear"></i> Options <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <%#   Moderation - TODO
+      <li role="presentation">
+        link_to t('.toggle_moderation'), refinery.moderation_< %= namespacing.underscore % >_admin_settings_path, :role => "menuitem",
+          :class => "dropdown-item #{::Refinery::< %= namespacing % >::< %= class_name % >::Moderation.enabled? ? 'success' : 'failure'}_icon" % >
+      </li>
+      %>
+      <li role="presentation">
+        <a href="<%= refinery.edit_admin_setting_path(notify) %>" target="_blank" role="menuitem"
+          class="open-modal" data-modal-title="Who to notify">
+          <i class="icon icon-edit"></i> Who to notify
+        </a>
+      </li>
+      <li role="presentation">
+        <a href="<%= refinery.edit_admin_setting_path(body) %>" target="_blank" role="menuitem"
+          class="open-modal" data-modal-title="Edit response email" data-modal-body="#edit-email" data-update-on-close="#edit-email">
+          <i class="icon icon-edit"></i> Response email
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div id="edit-email" class="hidden-xs-up">
+    <%= render partial: 'refinery/admin/settings/shared/edit_email_form', locals: {
+      body: body,
+      subject: subject,
+    } %>
+  </div>
+<% end %>
